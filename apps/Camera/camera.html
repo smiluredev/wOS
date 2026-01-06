@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Câmera</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Estilos customizados para a visualização da câmera */
+        #video-container {
+            position: relative;
+            overflow: hidden;
+            border-radius: 1rem;
+            background-color: #000;
+        }
+        video {
+            transform: scaleX(-1); /* Efeito espelho para a câmera frontal */
+        }
+        .filter-none { filter: none; }
+        .filter-grayscale { filter: grayscale(100%); }
+        .filter-sepia { filter: sepia(100%); }
+        .filter-invert { filter: invert(100%); }
+        .filter-blur { filter: blur(5px); }
+        .filter-brightness { filter: brightness(150%); }
+
+        /* Esconder scrollbar mas manter funcionalidade */
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+</head>
+<body class="bg-zinc-900 text-white min-h-screen flex flex-col items-center p-4">
+
+    <div class="max-w-md w-full flex flex-col gap-6">
+        <!-- Header -->
+        <header class="text-center">
+            <h1 class="text-2xl font-bold text-indigo-400">Camera</h1>
+            <p class="text-zinc-400 text-sm">Capture e aplique filtros em tempo real</p>
+        </header>
+
+        <!-- Viewport da Câmera -->
+        <div id="video-container" class="aspect-[3/4] shadow-2xl border-2 border-zinc-800">
+            <video id="video" autoplay playsinline class="w-full h-full object-cover filter-none"></video>
+            
+            <!-- Overlay de Botões Rápidos -->
+            <div class="absolute bottom-4 left-0 right-0 flex justify-center gap-4 px-4">
+                <button id="capture-btn" class="bg-white p-5 rounded-full shadow-lg active:scale-95 transition-transform">
+                    <div class="w-8 h-8 rounded-full border-4 border-zinc-900"></div>
+                </button>
+            </div>
+        </div>
+
+        <!-- Seleção de Filtros (Scroll Horizontal) -->
+        <div class="w-full overflow-x-auto no-scrollbar flex gap-3 pb-2">
+            <button onclick="setFilter('none')" class="flex-shrink-0 px-4 py-2 bg-zinc-800 rounded-full text-xs font-medium hover:bg-zinc-700 transition">Normal</button>
+            <button onclick="setFilter('grayscale')" class="flex-shrink-0 px-4 py-2 bg-zinc-800 rounded-full text-xs font-medium hover:bg-zinc-700 transition">P&B</button>
+            <button onclick="setFilter('sepia')" class="flex-shrink-0 px-4 py-2 bg-zinc-800 rounded-full text-xs font-medium hover:bg-zinc-700 transition">Sépia</button>
+            <button onclick="setFilter('invert')" class="flex-shrink-0 px-4 py-2 bg-zinc-800 rounded-full text-xs font-medium hover:bg-zinc-700 transition">Inverter</button>
+            <button onclick="setFilter('blur')" class="flex-shrink-0 px-4 py-2 bg-zinc-800 rounded-full text-xs font-medium hover:bg-zinc-700 transition">Blur</button>
+            <button onclick="setFilter('brightness')" class="flex-shrink-0 px-4 py-2 bg-zinc-800 rounded-full text-xs font-medium hover:bg-zinc-700 transition">Brilho</button>
+        </div>
+
+        <!-- Galeria/Preview da Última Foto -->
+        <div id="preview-section" class="hidden flex flex-col gap-3 bg-zinc-800 p-4 rounded-xl">
+            <div class="flex justify-between items-center">
+                <span class="text-sm font-bold uppercase tracking-wider text-zinc-500">Última Captura</span>
+                <button id="close-preview" class="text-zinc-400 hover:text-white">&times;</button>
+            </div>
+            <div class="relative">
+                <canvas id="canvas" class="w-full rounded-lg hidden"></canvas>
+                <img id="photo-preview" src="" alt="Sua foto" class="w-full rounded-lg shadow-md">
+            </div>
+            <div class="flex gap-2">
+                <a id="download-btn" href="#" download="minha-foto.png" class="flex-1 bg-indigo-600 text-center py-2 rounded-lg font-semibold hover:bg-indigo-500 transition">Salvar Foto</a>
+                <button id="share-btn" class="px-4 py-2 bg-zinc-700 rounded-lg hover:bg-zinc-600 transition">Compartilhar</button>
+            </div>
+        </div>
+
+        <!-- Mensagens de Erro -->
+        <div id="error-msg" class="hidden bg-red-900/50 border border-red-500 text-red-200 p-3 rounded-lg text-sm text-center">
+            Não foi possível acessar a câmera. Verifique as permissões.
+        </div>
+    </div>
+
+    <script>
+        const video = document.getElementById('video');
+        const canvas = document.getElementById('canvas');
+        const captureBtn = document.getElementById('capture-btn');
+        const photoPreview = document.getElementById('photo-preview');
+        const previewSection = document.getElementById('preview-section');
+        const downloadBtn = document.getElementById('download-btn');
+        const errorMsg = document.getElementById('error-msg');
+        const closePreview = document.getElementById('close-preview');
+
+        let currentFilter = 'none';
+
+        // Inicializar câmera
+        async function initCamera() {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ 
+                    video: { facingMode: "user" }, 
+                    audio: false 
+                });
+                video.srcObject = stream;
+            } catch (err) {
+                console.error("Erro ao acessar câmera: ", err);
+                errorMsg.classList.remove('hidden');
+            }
+        }
+
+        // Aplicar Filtro
+        window.setFilter = (filterName) => {
+            currentFilter = filterName;
+            // Remove todas as classes de filtro anteriores
+            video.className = 'w-full h-full object-cover';
+            // Adiciona a nova
+            video.classList.add(`filter-${filterName}`);
+        };
+
+        // Tirar Foto
+        captureBtn.addEventListener('click', () => {
+            const context = canvas.getContext('2d');
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+
+            // Desenhar o frame do vídeo no canvas
+            // Aplicar o filtro no contexto do canvas antes de desenhar
+            let filterString = '';
+            switch(currentFilter) {
+                case 'grayscale': filterString = 'grayscale(100%)'; break;
+                case 'sepia': filterString = 'sepia(100%)'; break;
+                case 'invert': filterString = 'invert(100%)'; break;
+                case 'blur': filterString = 'blur(5px)'; break;
+                case 'brightness': filterString = 'brightness(150%)'; break;
+                default: filterString = 'none';
+            }
+            
+            context.filter = filterString;
+            
+            // Inverter para manter o efeito espelho na foto salva se for câmera frontal
+            context.translate(canvas.width, 0);
+            context.scale(-1, 1);
+            
+            context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+            // Converter canvas para imagem
+            const data = canvas.toDataURL('image/png');
+            photoPreview.src = data;
+            downloadBtn.href = data;
+
+            // Mostrar seção de preview
+            previewSection.classList.remove('hidden');
+            previewSection.scrollIntoView({ behavior: 'smooth' });
+        });
+
+        // Fechar Preview
+        closePreview.addEventListener('click', () => {
+            previewSection.classList.add('hidden');
+        });
+
+        // Simulação de compartilhamento (Web Share API)
+        document.getElementById('share-btn').addEventListener('click', async () => {
+            if (navigator.share) {
+                try {
+                    const blob = await (await fetch(photoPreview.src)).blob();
+                    const file = new File([blob], 'foto.png', { type: 'image/png' });
+                    await navigator.share({
+                        files: [file],
+                        title: 'Minha Foto',
+                        text: 'Olha essa foto que tirei com meu app!',
+                    });
+                } catch (err) {
+                    console.log('Erro ao compartilhar', err);
+                }
+            } else {
+                alert('Compartilhamento não suportado neste navegador. Use o botão Salvar.');
+            }
+        });
+
+        // Iniciar ao carregar a página
+        window.addEventListener('load', initCamera);
+    </script>
+</body>
+</html>
+
