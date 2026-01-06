@@ -1,0 +1,16 @@
+{
+  "name": "wOS",
+  "short_name": "wOS Developer Preview",
+  "start_url": "index.html",
+  "icons": [
+    {
+      "src": "/icons/RepoStore.png",
+      "sizes": "256x256",
+      "type": "image/png"
+    }
+  ],
+  "theme_color": "#000000",
+  "background_color": "#FFFFFF",
+  "display": "fullscreen",
+  "orientation": "portrait"
+}

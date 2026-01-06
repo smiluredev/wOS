@@ -1,0 +1,32 @@
+<html>
+    
+    <title>Bem-vindo ao wOS</title>
+    <body>
+        <p>wOS</p>
+      
+        <h1>Apps</h1>
+        
+        <a href="apps/RepoStore/RepoStore.html">
+            <img src="icons/RepoStore.png" alt="RepoStore">
+        </a>
+        
+        <a href="apps/Camera/camera.html">
+            <img src="icons/Camera.png" alt="Camera">
+        </a>
+    </body>
+    
+    <footer>2026 - MiguelTheDRMR</footer>
+    
+    <link rel="stylesheet" type="text/css" href="style.css">
+    
+    <link rel="manifest" href="/manifest.json">
+    
+    <script>if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/sw.js')
+      .then(reg => console.log('Service Worker registrado com sucesso!', reg))
+      .catch(err => console.log('Falha ao registrar o Service Worker:', err));
+  });
+}
+</script>
+</html>
