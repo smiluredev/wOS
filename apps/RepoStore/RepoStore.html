@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>*** BEM-VINDO A REPO-STORE ***</title>
+    <style>
+        body {
+            background-color: #000080; /* Azul clássico Windows */
+            background-image: url('https://www.transparenttextures.com/patterns/cubes.png');
+            color: #FFFFFF;
+            font-family: "MS Sans Serif", "Arial", sans-serif;
+            font-size: 12px;
+        }
+
+        /* Estilo de moldura de janela antiga */
+        .window {
+            background-color: #c0c0c0;
+            border-top: 2px solid #ffffff;
+            border-left: 2px solid #ffffff;
+            border-right: 2px solid #808080;
+            border-bottom: 2px solid #808080;
+            padding: 2px;
+            color: #000000;
+            margin-bottom: 15px;
+        }
+
+        .title-bar {
+            background: linear-gradient(90deg, #000080, #1084d0);
+            color: white;
+            padding: 3px 5px;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .window-body {
+            padding: 10px;
+        }
+
+        a {
+            color: #0000FF;
+            font-weight: bold;
+        }
+
+        a:hover {
+            color: #FF0000;
+        }
+
+        /* Marquee e Texto Piscante */
+        .blink {
+            animation: blinker 1s linear infinite;
+        }
+
+        @keyframes blinker {
+            50% { opacity: 0; }
+        }
+
+        .sidebar-btn {
+            display: block;
+            width: 100%;
+            text-align: left;
+            background: #c0c0c0;
+            border: 2px outset #ffffff;
+            padding: 5px;
+            margin-bottom: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            text-decoration: none;
+            color: black;
+        }
+
+        .sidebar-btn:active {
+            border: 2px inset #ffffff;
+        }
+
+        #editor-area {
+            width: 100%;
+            height: 200px;
+            background: #000;
+            color: #0f0;
+            font-family: "Courier New", monospace;
+            border: 2px inset #808080;
+        }
+
+        .app-container {
+            background: #fff;
+            border: 2px inset #808080;
+            height: 400px;
+            width: 100%;
+        }
+
+        .visitor-counter {
+            background: #000;
+            color: #00FF00;
+            font-family: "Courier New", Courier, monospace;
+            padding: 5px;
+            border: 1px solid #808080;
+            display: inline-block;
+        }
+
+        hr {
+            border: 0;
+            border-top: 2px groove #ffffff;
+        }
+    </style>
+</head>
+<body>
+
+    <center>
+        <img src="https://web.archive.org/web/20090830033639/http://geocities.com/Tokyo/Temple/8440/under_construction.gif" alt="Em Construção">
+        <h1><font color="#FFFF00" face="Comic Sans MS">RepoStore</font></h1>
+        <marquee scrollamount="5" width="50%">*** O melhor repositório de HTML do bairro! Clique nos botões para abrir os programas! ***</marquee>
+    </center>
+
+    <table width="95%" align="center" border="0" cellpadding="10">
+        valign="top"
+        <tr>
+            <!-- Barra Lateral -->
+            <td width="200" valign="top">
+                <div class="window">
+                    <div class="title-bar">Menu Principal</div>
+                    <div class="window-body">
+                        <button class="sidebar-btn" onclick="showView('home')">🏠 Início</button>
+                        <button class="sidebar-btn" onclick="showView('playground')">🧪 Lab de Testes</button>
+                        <hr>
+                        <button class="sidebar-btn" onclick="loadClassic('calc')">🧮 Calculadora</button>
+                        <button class="sidebar-btn" onclick="loadClassic('msg')">📝 Recados</button>
+                        <hr>
+                        <center>
+                            <img src="https://web.archive.org/web/20091027005003/http://geocities.com/the_m_and_m_page/images/ani_netscape.gif" width="80"><br>
+                            <font size="1">Otimizado para IE 6.0</font>
+                        </center>
+                    </div>
+                </div>
+
+                <div class="window">
+                    <div class="title-bar">Visitante nº</div>
+                    <div class="window-body" align="center">
+                        <div class="visitor-counter">0000432</div>
+                    </div>
+                </div>
+            </td>
+
+            <!-- Conteúdo Central -->
+            <td valign="top">
+                
+                <!-- Home View -->
+                <div id="view-home" class="window">
+                    <div class="title-bar">Novidades.txt</div>
+                    <div class="window-body" style="background: white;">
+                        <h3>Bem-vindo ao meu repositório!</h3>
+                        <p>Aqui você pode testar suas criações em HTML. Use o <b>Laboratório de Testes</b> para codar em tempo real.</p>
+                        <center>
+                            <img src="https://web.archive.org/web/20090804104108/http://geocities.com/Heartland/Acres/2153/computer_man.gif" width="150">
+                        </center>
+                        <p class="blink text-red-600" style="color: red; font-weight: bold;">NOVO: Calculadora adicionada em 15/05/2004!</p>
+                    </div>
+                </div>
+
+                <!-- Playground View -->
+                <div id="view-playground" class="window" style="display:none;">
+                    <div class="title-bar">Webapp_Tester.exe</div>
+                    <div class="window-body">
+                        <p>Cole o código HTML abaixo e clique em "PROCESSAR":</p>
+                        <textarea id="editor-area"></textarea>
+                        <br><br>
+                        <button onclick="runRetroCode()" style="padding: 10px; cursor: pointer;">[ PROCESSAR CÓDIGO ]</button>
+                        <hr>
+                        <div class="app-container">
+                            <iframe id="retro-preview" width="100%" height="100%" frameborder="0"></iframe>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Iframe View -->
+                <div id="view-app" class="window" style="display:none;">
+                    <div class="title-bar" id="app-window-title">Programa</div>
+                    <div class="window-body">
+                        <div class="app-container">
+                            <iframe id="app-iframe" width="100%" height="100%" frameborder="0"></iframe>
+                        </div>
+                    </div>
+                </div>
+
+            </td>
+        </tr>
+    </table>
+
+    <center>
+        <hr width="80%">
+        <img src="https://web.archive.org/web/20090804104108/http://geocities.com/Heartland/Acres/2153/mail.gif" align="middle">
+        <font size="2">Mande um e-mail para repostoreapps@gmail.com</font>
+        <br>
+        <img src="https://web.archive.org/web/20091027083041/http://geocities.com/m_p_r_p/Award.gif" width="100">
+    </center>
+
+    <script>
+        const classicApps = {
+            calc: {
+                title: "CALCULADORA V1.0",
+                code: `
+                    <body bgcolor="#c0c0c0">
+                        <center>
+                            <h3>Calculadora</h3>
+                            <input type="text" id="v" style="width:150px; text-align:right;"><br><br>
+                            <button onclick="add('7')">7</button><button onclick="add('8')">8</button><button onclick="add('9')">9</button><button onclick="add('/')">/</button><br>
+                            <button onclick="add('4')">4</button><button onclick="add('5')">5</button><button onclick="add('6')">6</button><button onclick="add('*')">*</button><br>
+                            <button onclick="add('1')">1</button><button onclick="add('2')">2</button><button onclick="add('3')">3</button><button onclick="add('-')">-</button><br>
+                            <button onclick="add('0')">0</button><button onclick="res()">=</button><button onclick="add('+')">+</button><button onclick="clr()">C</button>
+                        </center>
+                        <script>
+                            function add(n){ document.getElementById('v').value+=n; }
+                            function clr(){ document.getElementById('v').value=''; }
+                            function res(){ try{ document.getElementById('v').value=eval(document.getElementById('v').value); }catch(e){ alert('Erro!'); } }
+                        <\/script>
+                    </body>
+                `
+            },
+            msg: {
+                title: "LIVRO DE VISITAS",
+                code: `
+                    <body bgcolor="#fff">
+                        <h4>Deixe seu recado:</h4>
+                        <input type="text" id="user" placeholder="Nome"><br>
+                        <textarea id="txt" style="width:100%"></textarea><br>
+                        <button onclick="add()">POSTAR</button>
+                        <hr>
+                        <div id="m"></div>
+                        <script>
+                            function add(){
+                                const u = document.getElementById('user').value;
+                                const t = document.getElementById('txt').value;
+                                document.getElementById('m').innerHTML += "<b>" + u + ":</b> " + t + "<br><hr>" + document.getElementById('m').innerHTML;
+                            }
+                        <\/script>
+                    </body>
+                `
+            }
+        };
+
+        function showView(id) {
+            document.getElementById('view-home').style.display = 'none';
+            document.getElementById('view-playground').style.display = 'none';
+            document.getElementById('view-app').style.display = 'none';
+            document.getElementById('view-' + id).style.display = 'block';
+        }
+
+        function loadClassic(id) {
+            showView('app');
+            const app = classicApps[id];
+            document.getElementById('app-window-title').innerText = app.title;
+            const ifr = document.getElementById('app-iframe');
+            const doc = ifr.contentWindow.document;
+            doc.open();
+            doc.write(app.code);
+            doc.close();
+        }
+
+        function runRetroCode() {
+            const code = document.getElementById('editor-area').value;
+            const ifr = document.getElementById('retro-preview');
+            const doc = ifr.contentWindow.document;
+            doc.open();
+            doc.write(code);
+            doc.close();
+        }
+
+        // Template inicial no editor
+        document.getElementById('editor-area').value = "<h1>Minha Pagina Legal</h1>\n<p>Isto e um teste!</p>\n<button onclick=\"alert('Oi!')\">Click Aqui</button>";
+    </script>
+</body>
+</html>
+
