@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Phone App Pro</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://lucide.dev/scripts/lucide.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .tab-content {
+            display: none;
+            height: calc(100vh - 160px);
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .keypad-button {
+            transition: all 0.1s ease;
+        }
+
+        .keypad-button:active {
+            background-color: #e5e7eb;
+            transform: scale(0.95);
+        }
+
+        .safe-area-bottom {
+            padding-bottom: env(safe-area-inset-bottom);
+        }
+
+        /* Custom Scrollbar */
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+</head>
+<body class="bg-zinc-50 text-zinc-900">
+
+    <div class="max-w-md mx-auto bg-white min-h-screen shadow-xl flex flex-col relative overflow-hidden">
+        
+        <!-- Status Bar Mockup -->
+        <div class="px-6 py-3 flex justify-between items-center text-xs font-semibold">
+            <span>9:41</span>
+            <div class="flex gap-1.5 items-center">
+                <i data-lucide="signal" class="w-3 h-3"></i>
+                <i data-lucide="wifi" class="w-3 h-3"></i>
+                <i data-lucide="battery" class="w-3 h-3"></i>
+            </div>
+        </div>
+
+        <!-- App Screens -->
+        <main class="flex-grow px-4 overflow-hidden">
+            
+            <!-- Recents Screen -->
+            <section id="recents" class="tab-content active overflow-y-auto no-scrollbar">
+                <h1 class="text-3xl font-bold py-4">Recentes</h1>
+                <div id="recent-calls-list" class="divide-y divide-zinc-100">
+                    <!-- Dinâmico -->
+                </div>
+            </section>
+
+            <!-- Contacts Screen -->
+            <section id="contacts" class="tab-content overflow-y-auto no-scrollbar">
+                <div class="sticky top-0 bg-white pt-4 pb-2">
+                    <h1 class="text-3xl font-bold mb-4">Contatos</h1>
+                    <div class="relative">
+                        <i data-lucide="search" class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-400"></i>
+                        <input type="text" id="contact-search" placeholder="Buscar" class="w-full bg-zinc-100 rounded-lg py-2 pl-10 pr-4 outline-none focus:ring-2 ring-indigo-500/20">
+                    </div>
+                </div>
+                <div id="contacts-list" class="divide-y divide-zinc-100">
+                    <!-- Dinâmico -->
+                </div>
+            </section>
+
+            <!-- Keypad Screen -->
+            <section id="keypad" class="tab-content">
+                <div class="h-full flex flex-col justify-end pb-8">
+                    <!-- Display de Número -->
+                    <div class="text-center mb-8 h-16">
+                        <div id="phone-display" class="text-4xl font-normal tracking-tighter transition-all"></div>
+                        <button id="add-contact-btn" class="text-indigo-600 text-sm mt-2 hidden">Adicionar número</button>
+                    </div>
+
+                    <!-- Grid do Teclado -->
+                    <div class="grid grid-cols-3 gap-y-4 justify-items-center max-w-[280px] mx-auto">
+                        <button class="keypad-button w-20 h-20 rounded-full bg-zinc-100 flex flex-col items-center justify-center" data-val="1">
+                            <span class="text-3xl">1</span>
+                            <span class="text-[10px] text-zinc-400 font-bold"> </span>
+                        </button>
+                        <button class="keypad-button w-20 h-20 rounded-full bg-zinc-100 flex flex-col items-center justify-center" data-val="2">
+                            <span class="text-3xl">2</span>
+                            <span class="text-[10px] text-zinc-400 font-bold uppercase">abc</span>
+                        </button>
+                        <button class="keypad-button w-20 h-20 rounded-full bg-zinc-100 flex flex-col items-center justify-center" data-val="3">
+                            <span class="text-3xl">3</span>
+                            <span class="text-[10px] text-zinc-400 font-bold uppercase">def</span>
+                        </button>
+                        <button class="keypad-button w-20 h-20 rounded-full bg-zinc-100 flex flex-col items-center justify-center" data-val="4">
+                            <span class="text-3xl">4</span>
+                            <span class="text-[10px] text-zinc-400 font-bold uppercase">ghi</span>
+                        </button>
+                        <button class="keypad-button w-20 h-20 rounded-full bg-zinc-100 flex flex-col items-center justify-center" data-val="5">
+                            <span class="text-3xl">5</span>
+                            <span class="text-[10px] text-zinc-400 font-bold uppercase">jkl</span>
+                        </button>
+                        <button class="keypad-button w-20 h-20 rounded-full bg-zinc-100 flex flex-col items-center justify-center" data-val="6">
+                            <span class="text-3xl">6</span>
+                            <span class="text-[10px] text-zinc-400 font-bold uppercase">mno</span>
+                        </button>
+                        <button class="keypad-button w-20 h-20 rounded-full bg-zinc-100 flex flex-col items-center justify-center" data-val="7">
+                            <span class="text-3xl">7</span>
+                            <span class="text-[10px] text-zinc-400 font-bold uppercase">pqrs</span>
+                        </button>
+                        <button class="keypad-button w-20 h-20 rounded-full bg-zinc-100 flex flex-col items-center justify-center" data-val="8">
+                            <span class="text-3xl">8</span>
+                            <span class="text-[10px] text-zinc-400 font-bold uppercase">tuv</span>
+                        </button>
+                        <button class="keypad-button w-20 h-20 rounded-full bg-zinc-100 flex flex-col items-center justify-center" data-val="9">
+                            <span class="text-3xl">9</span>
+                            <span class="text-[10px] text-zinc-400 font-bold uppercase">wxyz</span>
+                        </button>
+                        <button class="keypad-button w-20 h-20 rounded-full bg-zinc-100 flex flex-col items-center justify-center" data-val="*">
+                            <span class="text-3xl">*</span>
+                        </button>
+                        <button class="keypad-button w-20 h-20 rounded-full bg-zinc-100 flex flex-col items-center justify-center" data-val="0">
+                            <span class="text-3xl">0</span>
+                            <span class="text-[10px] text-zinc-400 font-bold">+</span>
+                        </button>
+                        <button class="keypad-button w-20 h-20 rounded-full bg-zinc-100 flex flex-col items-center justify-center" data-val="#">
+                            <span class="text-3xl">#</span>
+                        </button>
+
+                        <div class="w-20 h-20"></div> <!-- Placeholder -->
+                        <button id="call-btn" class="w-20 h-20 rounded-full bg-green-500 text-white flex items-center justify-center shadow-lg active:bg-green-600">
+                            <i data-lucide="phone" class="fill-current w-8 h-8"></i>
+                        </button>
+                        <button id="delete-btn" class="w-20 h-20 flex items-center justify-center text-zinc-400 hover:text-zinc-600 invisible">
+                            <i data-lucide="delete" class="w-6 h-6"></i>
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+
+        <!-- Chamada em Andamento (Modal) -->
+        <div id="calling-modal" class="fixed inset-0 bg-zinc-900 text-white z-50 flex flex-col items-center justify-between py-20 px-10 hidden">
+            <div class="text-center">
+                <p class="text-zinc-400 text-sm mb-2">chamando...</p>
+                <h2 id="calling-name" class="text-3xl font-light mb-2">Desconhecido</h2>
+                <p id="calling-number" class="text-lg opacity-60"></p>
+            </div>
+            
+            <div class="grid grid-cols-3 gap-10">
+                <div class="flex flex-col items-center gap-2">
+                    <div class="w-16 h-16 rounded-full border border-white/20 flex items-center justify-center"><i data-lucide="mic-off"></i></div>
+                    <span class="text-xs">mudo</span>
+                </div>
+                <div class="flex flex-col items-center gap-2">
+                    <div class="w-16 h-16 rounded-full border border-white/20 flex items-center justify-center"><i data-lucide="grid"></i></div>
+                    <span class="text-xs">teclado</span>
+                </div>
+                <div class="flex flex-col items-center gap-2">
+                    <div class="w-16 h-16 rounded-full border border-white/20 flex items-center justify-center"><i data-lucide="volume-2"></i></div>
+                    <span class="text-xs">viva-voz</span>
+                </div>
+            </div>
+
+            <button id="hangup-btn" class="w-20 h-20 rounded-full bg-red-500 flex items-center justify-center">
+                <i data-lucide="phone-off" class="w-8 h-8"></i>
+            </button>
+        </div>
+
+        <!-- Navigation Bar -->
+        <nav class="bg-zinc-50/80 backdrop-blur-md border-t border-zinc-200 px-6 py-2 flex justify-between safe-area-bottom">
+            <button class="nav-item flex flex-col items-center gap-1 text-zinc-400" onclick="showTab('recents')">
+                <i data-lucide="clock-4" class="w-6 h-6"></i>
+                <span class="text-[10px] font-medium">Recentes</span>
+            </button>
+            <button class="nav-item flex flex-col items-center gap-1 text-zinc-400" onclick="showTab('contacts')">
+                <i data-lucide="contact-2" class="w-6 h-6"></i>
+                <span class="text-[10px] font-medium">Contatos</span>
+            </button>
+            <button class="nav-item flex flex-col items-center gap-1 text-indigo-600" onclick="showTab('keypad')">
+                <i data-lucide="grip" class="w-6 h-6"></i>
+                <span class="text-[10px] font-medium">Teclado</span>
+            </button>
+        </nav>
+
+    </div>
+
+    <script>
+        // Dados iniciais
+        let contacts = [
+            { id: 1, name: "Alice Oliveira", phone: "11 98888-7777", initial: "A" },
+            { id: 2, name: "Bruno Silva", phone: "21 97777-6666", initial: "B" },
+            { id: 3, name: "Carla Souza", phone: "31 96666-5555", initial: "C" },
+            { id: 4, name: "Daniel Rocha", phone: "11 95555-4444", initial: "D" },
+            { id: 5, name: "Eduarda Lima", phone: "19 94444-3333", initial: "E" },
+            { id: 6, name: "Felipe Mendes", phone: "11 93333-2222", initial: "F" }
+        ];
+
+        let callHistory = [
+            { id: 101, name: "Alice Oliveira", type: "Saída", time: "Há 10 min" },
+            { id: 102, name: "11 91234-5678", type: "Perdida", time: "Ontem" },
+            { id: 103, name: "Mãe", type: "Entrada", time: "Terça-feira" }
+        ];
+
+        let dialString = "";
+
+        // Inicializar ícones
+        lucide.createIcons();
+
+        // Navegação de Abas
+        function showTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+            
+            document.querySelectorAll('.nav-item').forEach(nav => {
+                nav.classList.remove('text-indigo-600');
+                nav.classList.add('text-zinc-400');
+            });
+            event.currentTarget.classList.remove('text-zinc-400');
+            event.currentTarget.classList.add('text-indigo-600');
+        }
+
+        // Teclado Numérico
+        document.querySelectorAll('.keypad-button').forEach(btn => {
+            btn.addEventListener('click', () => {
+                dialString += btn.dataset.val;
+                updateDisplay();
+            });
+        });
+
+        document.getElementById('delete-btn').addEventListener('click', () => {
+            dialString = dialString.slice(0, -1);
+            updateDisplay();
+        });
+
+        function updateDisplay() {
+            const display = document.getElementById('phone-display');
+            const delBtn = document.getElementById('delete-btn');
+            const addBtn = document.getElementById('add-contact-btn');
+            
+            display.innerText = dialString;
+            delBtn.style.visibility = dialString.length > 0 ? 'visible' : 'hidden';
+            addBtn.classList.toggle('hidden', dialString.length === 0);
+            
+            // Ajuste de fonte se o número for longo
+            display.style.fontSize = dialString.length > 10 ? '1.875rem' : '2.25rem';
+        }
+
+        // Funções de Chamada
+        const callingModal = document.getElementById('calling-modal');
+        const callBtn = document.getElementById('call-btn');
+        const hangupBtn = document.getElementById('hangup-btn');
+
+        callBtn.addEventListener('click', () => {
+            if (dialString.length === 0) return;
+            
+            const contact = contacts.find(c => c.phone.replace(/\D/g,'') === dialString.replace(/\D/g,''));
+            document.getElementById('calling-name').innerText = contact ? contact.name : "Desconhecido";
+            document.getElementById('calling-number').innerText = dialString;
+            
+            callingModal.classList.remove('hidden');
+            
+            // Adicionar ao histórico
+            callHistory.unshift({
+                id: Date.now(),
+                name: contact ? contact.name : dialString,
+                type: "Saída",
+                time: "Agora"
+            });
+            renderRecents();
+        });
+
+        hangupBtn.addEventListener('click', () => {
+            callingModal.classList.add('hidden');
+            dialString = "";
+            updateDisplay();
+        });
+
+        // Renderizar Listas
+        function renderContacts(filter = "") {
+            const list = document.getElementById('contacts-list');
+            list.innerHTML = "";
+            
+            const filtered = contacts.filter(c => 
+                c.name.toLowerCase().includes(filter.toLowerCase()) || 
+                c.phone.includes(filter)
+            ).sort((a,b) => a.name.localeCompare(b.name));
+
+            filtered.forEach(c => {
+                const div = document.createElement('div');
+                div.className = "py-3 flex items-center gap-4 active:bg-zinc-50 cursor-pointer";
+                div.innerHTML = `
+                    <div class="w-10 h-10 rounded-full bg-zinc-200 flex items-center justify-center font-bold text-zinc-600">${c.initial}</div>
+                    <div>
+                        <p class="font-semibold text-sm">${c.name}</p>
+                        <p class="text-xs text-zinc-400">${c.phone}</p>
+                    </div>
+                `;
+                div.onclick = () => {
+                    dialString = c.phone;
+                    showTab('keypad');
+                    updateDisplay();
+                };
+                list.appendChild(div);
+            });
+        }
+
+        function renderRecents() {
+            const list = document.getElementById('recent-calls-list');
+            list.innerHTML = "";
+            
+            callHistory.forEach(call => {
+                const isMissed = call.type === "Perdida";
+                const div = document.createElement('div');
+                div.className = "py-4 flex justify-between items-center active:bg-zinc-50";
+                div.innerHTML = `
+                    <div class="flex items-center gap-3">
+                        <i data-lucide="phone-incoming" class="w-4 h-4 ${isMissed ? 'text-red-500' : 'text-zinc-300'}"></i>
+                        <div>
+                            <p class="font-semibold ${isMissed ? 'text-red-500' : ''}">${call.name}</p>
+                            <p class="text-xs text-zinc-400">${call.type}</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <span class="text-xs text-zinc-400">${call.time}</span>
+                        <i data-lucide="info" class="w-4 h-4 text-indigo-500"></i>
+                    </div>
+                `;
+                list.appendChild(div);
+            });
+            lucide.createIcons();
+        }
+
+        // Search listener
+        document.getElementById('contact-search').addEventListener('input', (e) => {
+            renderContacts(e.target.value);
+        });
+
+        // Iniciar
+        renderContacts();
+        renderRecents();
+        showTab('keypad');
+    </script>
+</body>
+</html>
+
