@@ -1,2 +1,2 @@
 # wOS
-A Little Mobile Web OS Project Inspired by FirefoxOS
+A Little Mobile Web OS PoC Project Inspired by FirefoxOS
