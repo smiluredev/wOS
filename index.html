@@ -1,6 +1,25 @@
 <html>
     
     <title>Bem-vindo ao wOS</title>
+
+    <head>
+      <meta charset="UTF-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <link rel="manifest" href="/manifest.json">
+      <script>
+        if ('serviceWorker' in navigator) {
+          navigator.serviceWorker.register('/sw.js')
+            .then(function(registration) {
+              console.log('Service Worker registrado com sucesso:', registration.scope);
+            })
+            .catch(function(error) {
+              console.log('Falha ao registrar o Service Worker:', error);
+            });
+        }
+      </script>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    </head>
+
     <body>
         <p>wOS</p>
       
@@ -14,21 +33,9 @@
             <img src="icons/Camera.png" alt="Camera">
         </a>
     </body>
-
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     
     <footer>2026 - MiguelTheDRMR</footer>
     
     <link rel="stylesheet" type="text/css" href="style.css">
     
-    <link rel="manifest" href="/manifest.json">
-    
-    <script>if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/sw.js')
-      .then(reg => console.log('Service Worker registrado com sucesso!', reg))
-      .catch(err => console.log('Falha ao registrar o Service Worker:', err));
-  });
-}
-</script>
 </html>
